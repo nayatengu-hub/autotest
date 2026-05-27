@@ -12,3 +12,4 @@ class BasePage:
 
     def check_url(self, expected_url: str):
         assert self.page.url == expected_url
+
