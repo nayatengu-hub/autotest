@@ -1,5 +1,5 @@
 import pytest
-from pages.login_page import LoginPage
+from pages.auth.login_page import LoginPage
 import config  # Импортируем весь модуль конфига
 
 @pytest.fixture(scope="session")

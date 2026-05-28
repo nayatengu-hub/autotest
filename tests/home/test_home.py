@@ -1,5 +1,5 @@
 from playwright.sync_api import Page
-from pages.home_page import HomePage
+from pages.home.home_page import HomePage
 
 
 def test_home(auth_admin_page):
