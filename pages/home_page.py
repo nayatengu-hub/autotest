@@ -1,10 +1,10 @@
 from playwright.sync_api import Page
 from pages.base_page import BasePage
-from components.page_layout import PageLayout
-from components.tab_accounts import TableAccounts
-from components.tab_metrics import BlocksMetrics
-from components.page_header_admin import PageHeaderAdmin
-from components.settings_profile import SettingsProfile
+from components.layout.page_layout import PageLayout
+from components.tabs.tab_accounts import TableAccounts
+from components.tabs.tab_metrics import BlocksMetrics
+from components.layout.page_header_admin import PageHeaderAdmin
+from components.profile.settings_profile import SettingsProfile
 
 
 class HomePage(BasePage):
