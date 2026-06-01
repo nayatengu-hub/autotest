@@ -5,4 +5,4 @@ def test_account_page(auth_user_page):
     account_page = AccountPage(auth_user_page)
     account_page.navigate()
 
-    expect(auth_user_page).to_have_url("**/account")
+    auth_user_page.wait_for_url("**/account")
