@@ -15,7 +15,7 @@ def auth_user_state(browser):
     
     # Берем креды из конфига (они уже соответствуют нужному стенду)
     login_page.login_form.login(username=config.username, password=config.password)
-    page.wait_for_url("**/stands")
+    page.wait_for_url("**/home/accounts")
     
     state_path = "data/auth_state.json"
     context.storage_state(path=state_path)
