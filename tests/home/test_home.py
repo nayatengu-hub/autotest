@@ -6,8 +6,7 @@ from pages.home.home_page import HomePage
 @allure.feature("Главная страница")
 @allure.story("Отображение элементов главной страницы")
 @allure.title("Проверка элементов на главной странице администратора")
-def test_home(auth_admin_page):
-    home_page = HomePage(auth_admin_page)
+def test_home(home_page: HomePage):
     with allure.step("Переход на главную страницу"):
         home_page.navigate()
     with allure.step("Проверка элементов блока метрик"):
