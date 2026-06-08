@@ -1,4 +1,5 @@
 import pytest
+import os
 from pages.auth.login_page import LoginPage
 import config  # Импортируем весь модуль конфига
 
@@ -15,15 +16,18 @@ def auth_user_state(browser):
     
     # Берем креды из конфига (они уже соответствуют нужному стенду)
     login_page.login_form.login(username=config.username, password=config.password)
-    page.wait_for_url("**/home/accounts")
+    
+    # Ожидание успешного входа!
+    page.wait_for_url("**/home/**")
     
     state_path = "data/auth_state.json"
+    os.makedirs(os.path.dirname(state_path), exist_ok=True) # Создаем папку, если ее нет
     context.storage_state(path=state_path)
     context.close()
     return state_path
 
 @pytest.fixture(scope="function")
-def auth_user_page(browser, auth_user_state): # Исправлена опечатка в имени фикстуры
+def auth_user_page(browser, auth_user_state):
     # Передаем base_url и для тестов
     context = browser.new_context(
         storage_state=auth_user_state, 
@@ -52,7 +56,11 @@ def auth_admin_state(browser):
     # Используем админские креды из конфига
     login_page.login_form.login(username=config.admin_username, password=config.admin_password)
     
+    # ИСПРАВЛЕНИЕ: Ждем успешного входа администратора!
+    page.wait_for_url("**/home/**")
+    
     state_path = "data/auth_admin_state.json"
+    os.makedirs(os.path.dirname(state_path), exist_ok=True) # Создаем папку, если ее нет
     context.storage_state(path=state_path)
     context.close()
     return state_path

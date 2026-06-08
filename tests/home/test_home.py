@@ -19,4 +19,4 @@ def test_home(auth_admin_page):
     with allure.step("Проверка элементов макета страницы"):
         home_page.page_layout.checking_elements()
     with allure.step("Переход в настройки профиля"):
-        home_page.set_profile.go_to_settings(fullname='Ошибка Суперадмин')
+        home_page.set_profile.go_to_settings(fullname='Суперадмин')

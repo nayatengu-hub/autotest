@@ -13,8 +13,8 @@ class AccountDetails(BaseComponent):
         self.edit_avatar = page.get_by_role("main").get_by_test_id("avatar")
 
     def tab_account_details(self):
-        self.edit_name.fill('Ошибка Суперадмин1')
+        self.edit_name.fill('Суперадмин1')
         self.save_button.click()
-        self.edit_name.fill('Ошибка Суперадмин12')
+        self.edit_name.fill('Суперадмин12')
         self.cancel_button.click()
         self.edit_avatar.click()

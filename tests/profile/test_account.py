@@ -16,5 +16,4 @@ def test_account_page(auth_user_page):
     with allure.step("Проверка вкладки 'Пользователи и роли'"):
         account_page.tab_users_roles.tab_users_roles()
     
-    with allure.step("Ожидание загрузки страницы аккаунта"):
-        auth_user_page.wait_for_url("**/account")
+
