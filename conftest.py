@@ -1,3 +1,4 @@
+pytest_plugins = ["fixtures.pages"]
 import pytest
 import os
 from pages.auth.login_page import LoginPage

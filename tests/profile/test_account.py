@@ -5,8 +5,7 @@ from pages.profile.account_page import AccountPage
 @allure.feature("Профиль пользователя")
 @allure.story("Настройки аккаунта")
 @allure.title("Проверка вкладок на странице настроек аккаунта")
-def test_account_page(auth_user_page):
-    account_page = AccountPage(auth_user_page)
+def test_account_page(account_page: AccountPage):
     with allure.step("Переход на страницу настроек аккаунта"):
         account_page.navigate()
     with allure.step("Проверка вкладки 'Детали аккаунта'"):
