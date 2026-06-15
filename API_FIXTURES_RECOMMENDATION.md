@@ -1,20 +1,20 @@
-# Recommendations for Adding API Fixtures in Playwright (Python)
+# Рекомендации по добавлению API фикстур в Playwright (Python)
 
-Given that your automated tests will be isolated and you already have an established Playwright architecture with browser contexts managing authentication, the best approach is to use Playwright's built-in **`APIRequestContext`**.
+Учитывая, что ваши автотесты должны быть изолированными, и у вас уже есть готовая архитектура Playwright с контекстами браузера, управляющими аутентификацией, лучшим подходом будет использование встроенного в Playwright **`APIRequestContext`**.
 
-## Why use Playwright's `APIRequestContext`?
+## Почему стоит использовать `APIRequestContext` из Playwright?
 
-1. **Shared Authentication State**: Playwright's API context can share the same `storage_state` (cookies, local storage) as your UI tests. This means your API calls can reuse the authentication states you already create in `conftest.py` (like `auth_user_state` and `auth_admin_state`), without needing to re-authenticate or manage tokens separately.
-2. **Isolation**: You can create separate API contexts for different test scopes, ensuring clean isolation between test runs.
-3. **No External Dependencies**: You avoid adding extra libraries like `requests` or `httpx`, keeping your stack unified.
-4. **Setup & Teardown**: Pytest fixtures using `yield` are perfect for creating data before the test and cleaning it up after.
+1. **Общее состояние аутентификации**: API контекст Playwright может использовать то же самое состояние (`storage_state` — cookies, local storage), что и ваши UI тесты. Это означает, что ваши API вызовы могут переиспользовать состояния аутентификации, которые вы уже создаете в `conftest.py` (например, `auth_user_state` и `auth_admin_state`), без необходимости повторной аутентификации или отдельного управления токенами.
+2. **Изоляция**: Вы можете создавать отдельные API контексты для разных тестов, обеспечивая чистую изоляцию между запусками тестов.
+3. **Отсутствие внешних зависимостей**: Вы избегаете добавления лишних библиотек, таких как `requests` или `httpx`, сохраняя ваш стек единым.
+4. **Установка (Setup) и очистка (Teardown)**: Фикстуры Pytest с использованием `yield` идеально подходят для создания данных перед тестом и их последующего удаления.
 
-## Recommended Structure & Implementation
+## Рекомендуемая структура и реализация
 
-Here is a recommended approach for adding API fixtures to your project.
+Ниже приведен рекомендуемый подход для добавления API фикстур в ваш проект.
 
-### 1. Create an API Client or API Base Class
-Create an API client wrapper to hold common API logic (like base URLs and headers). You could place this in a new directory `api/` or within `fixtures/`.
+### 1. Создание API клиента или базового класса API
+Создайте класс-обертку для API клиента, чтобы хранить общую логику API (например, базовые URL и заголовки). Вы можете разместить его в новой директории `api/` или внутри `fixtures/`.
 
 ```python
 # api/client.py
@@ -29,20 +29,20 @@ class ApiClient:
             "/api/items",
             data={"name": name, "description": description}
         )
-        assert response.ok, f"Failed to create item: {response.text()}"
+        assert response.ok, f"Не удалось создать элемент: {response.text()}"
         return response.json()
 
     def delete_item(self, item_id: str):
         response = self.request.delete(f"/api/items/{item_id}")
-        assert response.ok, f"Failed to delete item: {response.text()}"
+        assert response.ok, f"Не удалось удалить элемент: {response.text()}"
 ```
 
-### 2. Define API Fixtures in `conftest.py` or `fixtures/api.py`
+### 2. Определение API фикстур в `conftest.py` или `fixtures/api.py`
 
-You can use the built-in Playwright `playwright` fixture to create an isolated `APIRequestContext` that is hydrated with your existing session state.
+Вы можете использовать встроенную фикстуру Playwright `playwright`, чтобы создать изолированный `APIRequestContext`, который будет наполнен вашим существующим состоянием сессии.
 
 ```python
-# fixtures/api.py or conftest.py
+# fixtures/api.py или conftest.py
 import pytest
 from playwright.sync_api import Playwright
 from api.client import ApiClient
@@ -51,27 +51,27 @@ import config
 @pytest.fixture(scope="function")
 def user_api_client(playwright: Playwright, auth_user_state: str) -> ApiClient:
     """
-    Creates an API client authenticated as a regular user,
-    using the storage state saved in conftest.py.
+    Создает API клиент, аутентифицированный как обычный пользователь,
+    используя сохраненное состояние из conftest.py.
     """
-    # Create an API context with the base_url and the user's storage state
+    # Создаем API контекст с базовым URL и состоянием хранилища пользователя
     api_request_context = playwright.request.new_context(
         base_url=config.base_url,
         storage_state=auth_user_state
     )
 
-    # Initialize your API wrapper
+    # Инициализируем вашу обертку API
     client = ApiClient(api_request_context)
 
     yield client
 
-    # Clean up the context after the test
+    # Очищаем контекст после завершения теста
     api_request_context.dispose()
 
 @pytest.fixture(scope="function")
 def admin_api_client(playwright: Playwright, auth_admin_state: str) -> ApiClient:
     """
-    Creates an API client authenticated as an admin.
+    Создает API клиент, аутентифицированный как администратор.
     """
     api_request_context = playwright.request.new_context(
         base_url=config.base_url,
@@ -83,61 +83,61 @@ def admin_api_client(playwright: Playwright, auth_admin_state: str) -> ApiClient
     api_request_context.dispose()
 ```
 
-### 3. Create Setup/Teardown Data Fixtures
+### 3. Создание фикстур для подготовки и очистки данных (Setup/Teardown)
 
-Now, you can use your `api_client` fixtures to build specific setup/teardown fixtures for your tests. These fixtures create the data before the test yields, and delete it afterward.
+Теперь вы можете использовать ваши фикстуры `api_client` для создания специфичных фикстур подготовки/очистки данных для ваших тестов. Эти фикстуры создают данные до `yield` в тесте и удаляют их после.
 
 ```python
-# fixtures/data.py or in conftest.py
+# fixtures/data.py или в conftest.py
 import pytest
 
 @pytest.fixture(scope="function")
 def test_item(user_api_client):
     """
-    Fixture to create an item for testing, and delete it after the test finishes.
+    Фикстура для создания элемента для тестирования и его удаления после завершения теста.
     """
-    # 1. SETUP: Create the pre-condition data via API
+    # 1. SETUP: Создание предварительных данных через API
     item_data = user_api_client.create_item(
-        name="Test Item",
-        description="Created via API fixture"
+        name="Тестовый элемент",
+        description="Создан через API фикстуру"
     )
 
-    # 2. YIELD: Pass the created data to the test
+    # 2. YIELD: Передача созданных данных в тест
     yield item_data
 
-    # 3. TEARDOWN: Clean up the data via API
+    # 3. TEARDOWN: Очистка данных через API
     user_api_client.delete_item(item_data["id"])
 ```
 
-### 4. Use in Tests
+### 4. Использование в тестах
 
-In your tests, you can now seamlessly combine the UI pages and the API-generated test data. The test itself remains clean and focused solely on UI verification, while the data management happens quickly and reliably behind the scenes.
+Теперь в ваших тестах вы можете легко комбинировать страницы UI и тестовые данные, сгенерированные через API. Сам тест остается чистым и сфокусированным исключительно на проверке пользовательского интерфейса (UI), в то время как управление данными происходит быстро и надежно за кулисами.
 
 ```python
 # tests/test_items.py
 import allure
 
-@allure.feature("Items")
-@allure.story("View Items")
+@allure.feature("Элементы")
+@allure.story("Просмотр элементов")
 @allure.title("Проверка отображения созданного элемента")
 def test_item_is_visible(account_page, test_item):
     """
-    The 'test_item' fixture automatically creates the item via API before this runs,
-    and cleans it up afterward.
+    Фикстура 'test_item' автоматически создает элемент через API перед запуском теста,
+    и очищает его после.
     """
     with allure.step("Перейти в раздел аккаунта"):
-        # account_page is already authenticated
+        # account_page уже аутентифицирован
         account_page.navigate()
 
     with allure.step("Проверить, что тестовый элемент отображается"):
-        # We can use the data returned by the API fixture (test_item)
-        # to verify it in the UI.
+        # Мы можем использовать данные, возвращенные API фикстурой (test_item),
+        # чтобы проверить их в UI.
         item_name = test_item["name"]
         account_page.verify_item_visible(item_name)
 ```
 
-## Summary of Benefits for this Approach:
-- **Speed**: API calls are much faster than setting up data via the UI.
-- **Reliability**: Decouples UI test flakiness from test data setup.
-- **Maintainability**: Keeps your tests clean; logic is abstracted away in API clients and Pytest fixtures.
-- **Integration**: Leverages the existing `config.base_url` and `storage_state` structure you have already built.
+## Краткий обзор преимуществ данного подхода:
+- **Скорость**: API вызовы выполняются намного быстрее, чем создание данных через UI.
+- **Надежность**: Отделяет нестабильность UI тестов от процесса подготовки тестовых данных.
+- **Поддерживаемость**: Сохраняет ваши тесты чистыми; логика абстрагирована в API клиентах и фикстурах Pytest.
+- **Интеграция**: Использует уже созданную вами структуру `config.base_url` и `storage_state`.
