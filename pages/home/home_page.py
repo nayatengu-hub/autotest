@@ -1,9 +1,9 @@
 from playwright.sync_api import Page
 from pages.base_page import BasePage
-from components.layout.page_layout import PageLayout
+from components.layout.page_layout_component import PageLayout
 from components.tabs.tab_accounts import TableAccounts
 from components.tabs.tab_metrics import BlocksMetrics
-from components.layout.page_header_admin import PageHeaderAdmin
+from components.layout.page_header_admin_component import PageHeaderAdmin
 from components.profile.settings_profile import SettingsProfile
 
 

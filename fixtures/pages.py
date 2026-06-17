@@ -4,6 +4,7 @@ from pages.home.home_page import HomePage
 from pages.profile.account_page import AccountPage
 from pages.sidebar.section_account_page import SectionAccountsPage
 
+
 @pytest.fixture
 def login_page(guest_page) -> LoginPage:
     return LoginPage(guest_page)
