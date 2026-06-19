@@ -6,6 +6,9 @@ import pytest
 import os
 from pages.auth.login_page import LoginPage
 import config  # Импортируем весь модуль конфига
+from playwright.sync_api import Playwright, APIRequestContext
+
+
 
 @pytest.fixture(scope="session")
 def auth_user_state(browser):

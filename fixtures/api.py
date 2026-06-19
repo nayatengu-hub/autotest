@@ -1,5 +1,5 @@
 import pytest
-from playwright.sync_api import Playwright
+from playwright.sync_api import Playwright, APIRequestContext
 from api.client import ApiClient
 import config
 
