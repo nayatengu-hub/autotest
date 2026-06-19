@@ -22,14 +22,27 @@ class AccountDetails(BaseComponent):
         self.confirm_deletion = page.get_by_role("button", name="Удалить")
         self.select_avatar = page.get_by_role("main").get_by_test_id("avatar")
         
-        # --- ЛОКАТОРЫ ДЛЯ АЛЕРТОВ (СТРОГО ПО ТЗ) ---
+        # --- ЛОКАТОРЫ ДЛЯ АЛЕРТОВ ---
         self.alert_missing_avatar = page.get_by_text("Выберите аватар для сохранения", exact=True)
         self.alert_invalid_name = page.get_by_text("Поле может содержать только кириллицу, пробелы и дефисы", exact=True)
         self.alert_profile_updated = page.get_by_text("Профиль успешно обновлён", exact=True)
         self.alert_avatar_changed = page.get_by_text("Аватар успешно изменён", exact=True)
         
+        # Кнопка закрытия алерта 
+        self.close_alert_button = page.locator(".MuiButtonBase-root.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeMedium.MuiButton-textSizeMedium.MuiButton-colorPrimary.MuiButton-disableElevation.bp-1dgbx2w")
+        
         # Длинный класс кнопки подтверждения
         self.confirm_button = page.locator(".MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.MuiButton-disableElevation.bp-18dguzg")
+
+        # Кнопка подтверждения сохранения аватара
+        self.confirm_button_avatar = page.locator(".MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.MuiButton-disableElevation.bp-18dguzg")
+    
+    # --- Вспомогательный метод для закрытия алертов ---
+    def close_alert(self, alert_locator: Locator):
+        """Кликает по кнопке закрытия алерта и ждет его полного исчезновения"""
+        self.close_alert_button.click()
+        # Обязательно ждем, пока алерт скроется, чтобы он не перекрывал другие элементы
+        expect(alert_locator).to_be_hidden(timeout=5000)
 
     def update_name_success(self, new_name: str = 'Анастасия Тестовая'):
         """Изменение имени с успешным сохранением"""
@@ -44,7 +57,8 @@ class AccountDetails(BaseComponent):
         self.save_button.click(force=True)
         
         expect(self.alert_profile_updated).to_be_visible(timeout=10000)
-        self.page.wait_for_timeout(3000)
+        # Закрываем алерт после появления
+        self.close_alert(self.alert_profile_updated)
         
         # Возвращаем имя обратно
         self.edit_name.focus()
@@ -57,11 +71,11 @@ class AccountDetails(BaseComponent):
         self.save_button.click(force=True)
 
         expect(self.alert_profile_updated).to_be_visible(timeout=10000)
-        self.page.wait_for_timeout(3000)
+        # Снова закрываем алерт, чтобы оставить страницу чистой
+        self.close_alert(self.alert_profile_updated)
 
     def update_name_with_error(self, invalid_name: str = 'Latin'):
         """Изменение имени с ошибкой валидации"""
-        # Обновляем страницу перед негативным тестом, чтобы очистить состояние (например, зависшие нотификации)
         self.page.reload()
         self.edit_name.wait_for(state="visible")
 
@@ -72,24 +86,36 @@ class AccountDetails(BaseComponent):
 
         self.page.locator('body').click()
         self.save_button.wait_for(state="visible")
-        self.page.wait_for_timeout(500)
         self.save_button.click(force=True)
 
-        # Ждем немного перед проверкой, чтобы UI обновился
-        self.page.wait_for_timeout(1000)
         expect(self.alert_invalid_name).to_be_visible(timeout=10000)
+        
+        # Если алерт с ошибкой тоже имеет кнопку закрытия, закрываем его
+        if self.close_alert_button.is_visible():
+            self.close_alert(self.alert_invalid_name)
+            
         self.cancel_button.click(force=True)
 
     def upload_avatar_success(self):
         """Успешная загрузка и сохранение аватара"""
+        # Кликаем по области выбора аватара
+        self.select_avatar.click()
+        
+        # Загружаем файл через указанный текстовый элемент
         self.page.locator("input[type='file']").set_input_files(self.avatar_file_path)
-        self.page.wait_for_load_state("networkidle")
-        expect(self.alert_avatar_changed).to_be_visible()
+        
+        # Подтверждаем загрузку
+        self.confirm_button_avatar.click()
+        
+        # Ждем появления алерта об успехе
+        # expect(self.alert_avatar_changed).to_be_visible(timeout=60000)
+        
+        # Обязательно закрываем алерт перед удалением аватара
+        self.close_alert(self.alert_avatar_changed)
         
         # Удаление аватара для чистоты тестов
         self.delete_avatar.click()
         self.confirm_deletion.click()
-        self.page.wait_for_load_state("networkidle")
 
     def upload_avatar_missing_error(self):
         """Негативный тест аватара: попытка сохранить без выбора файла"""

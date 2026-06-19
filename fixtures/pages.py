@@ -2,7 +2,7 @@ import pytest
 from pages.auth.login_page import LoginPage
 from pages.home.home_page import HomePage
 from pages.profile.account_page import AccountPage
-from pages.sidebar.section_account_page import SectionAccountsPage
+from pages.sidebar.section_account_page import SectionPage
 
 
 @pytest.fixture
@@ -18,5 +18,5 @@ def account_page(auth_user_page) -> AccountPage:
     return AccountPage(auth_user_page)
 
 @pytest.fixture
-def sidebar_page(auth_admin_page) -> SectionAccountsPage:
-    return SectionAccountsPage(auth_admin_page)
+def sidebar_page(auth_admin_page) -> SectionPage:
+    return SectionPage(auth_admin_page)
