@@ -28,8 +28,10 @@ class SectionStands(BaseComponent):
         
         
 
-    def section_stands(self):
+    def open(self):
         self.sidebar_stands.click()
+
+    def verify_ui_elements(self):
         self.button_add.click()
         self.page_title_stands.is_visible()
         self.page_heading_stands.is_visible()
