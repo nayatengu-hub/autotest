@@ -4,3 +4,4 @@ __pycache__/
 data/*_state.json
 allure-results/
 __pycache__/
+__pycache__/

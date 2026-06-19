@@ -1,4 +1,7 @@
-pytest_plugins = ["fixtures.pages"]
+pytest_plugins = [
+    "fixtures.pages",
+    "fixtures.api",
+]
 import pytest
 import os
 from pages.auth.login_page import LoginPage
