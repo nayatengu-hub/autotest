@@ -18,4 +18,4 @@ def test_home(home_page: HomePage):
     with allure.step("Проверка элементов макета страницы"):
         home_page.page_layout.checking_elements()
     with allure.step("Переход в настройки профиля"):
-        home_page.set_profile.go_to_settings(fullname='Суперадмин')
+        home_page.set_profile.go_to_settings(fullname='Анастасия')
