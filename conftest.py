@@ -7,6 +7,7 @@ import os
 from pages.auth.login_page import LoginPage
 import config  # Импортируем весь модуль конфига
 from playwright.sync_api import Playwright, APIRequestContext
+from pages.account_card.account_card_page import AccountCardPage
 
 
 
@@ -81,3 +82,11 @@ def auth_admin_page(browser, auth_admin_state):
     page = context.new_page()
     yield page
     context.close()
+
+
+    @pytest.fixture(scope="function")
+def account_card_page(page):  # Если нужен залогиненный контекст, вместо page используй auth_admin_page или auth_user_page
+    """Фикстура для инициализации карточки аккаунта"""
+    return AccountCardPage(page)
+
+    
