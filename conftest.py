@@ -11,10 +11,26 @@ from pages.account_card.account_card_page import AccountCardPage
 
 
 
+
+@pytest.fixture(scope="session")
+def browser_context_args(browser_context_args):
+    return {
+        **browser_context_args,
+        "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "extra_http_headers": {"Accept-Language": "ru-RU,ru;q=0.9"},
+    }
+
+@pytest.fixture(scope="session")
+def browser_type_launch_args(browser_type_launch_args):
+    return {
+        **browser_type_launch_args,
+        "args": ["--disable-blink-features=AutomationControlled"],
+    }
+
 @pytest.fixture(scope="session")
 def auth_user_state(browser):
     # Передаем base_url в контекст!
-    context = browser.new_context(base_url=config.base_url)
+    context = browser.new_context(base_url=config.base_url, user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36", extra_http_headers={"Accept-Language": "ru-RU,ru;q=0.9"})
     page = context.new_page()
     
     login_page = LoginPage(page)
@@ -48,14 +64,14 @@ def auth_user_page(browser, auth_user_state):
 @pytest.fixture(scope="function")
 def guest_page(browser):
     # Гостевая страница тоже должна знать, на каком мы стенде
-    context = browser.new_context(base_url=config.base_url)
+    context = browser.new_context(base_url=config.base_url, user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36", extra_http_headers={"Accept-Language": "ru-RU,ru;q=0.9"})
     page = context.new_page()
     yield page
     context.close()
 
 @pytest.fixture(scope="session")
 def auth_admin_state(browser):
-    context = browser.new_context(base_url=config.base_url)
+    context = browser.new_context(base_url=config.base_url, user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36", extra_http_headers={"Accept-Language": "ru-RU,ru;q=0.9"})
     page = context.new_page()
     
     login_page = LoginPage(page)
