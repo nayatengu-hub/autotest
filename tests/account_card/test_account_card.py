@@ -19,10 +19,10 @@ def test_account_card(account_card_page: AccountCardPage):
         "block_period": 14
     }
     
-    # Шаг 1: Если info_stand — это метод клика/перехода на вкладку параметров, 
-    # оборачиваем его в шаг Allure:
-    with allure.step("Перейти в параметры стенда"):
-        account_card_page.info_stand()  # Вызываем как метод (со скобками)
+    with allure.step("Переход на страницу аккаунта"):
+        account_card_page.navigate()
+        account_card_page.info_stand.dott.click()
+        account_card_page.info_stand.card_card.click()
     
     # Шаг 2: Проверяем поля прямо через объект фикстуры account_card_page
     with allure.step("Убедиться, что карточка параметров загрузилась и все поля верны"):
