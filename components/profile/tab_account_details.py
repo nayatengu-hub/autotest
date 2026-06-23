@@ -10,7 +10,7 @@ class AccountDetails(BaseComponent):
         
         # --- ОБЪЯВЛЕНИЕ ЛОКАТОРОВ ---
         self.save_button = page.get_by_role('button', name='Сохранить')
-        self.edit_name = page.get_by_role('textbox')
+        self.edit_name = page.get_by_role('textbox').first
         self.cancel_button = page.get_by_role('button', name='Отмена')
         
         # Динамический путь к файлу
@@ -24,7 +24,7 @@ class AccountDetails(BaseComponent):
         
         # --- ЛОКАТОРЫ ДЛЯ АЛЕРТОВ ---
         self.alert_missing_avatar = page.get_by_text("Выберите аватар для сохранения", exact=True)
-        self.alert_invalid_name = page.get_by_text("Поле может содержать только кириллицу, пробелы и дефисы", exact=True)
+        self.alert_invalid_name = page.get_by_text("Имя может содержать только кириллицу, пробелы и дефисы", exact=True)
         self.alert_profile_updated = page.get_by_text("Профиль успешно обновлён", exact=True)
         self.alert_avatar_changed = page.get_by_text("Аватар успешно изменён", exact=True)
         

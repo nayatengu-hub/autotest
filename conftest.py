@@ -84,9 +84,9 @@ def auth_admin_page(browser, auth_admin_state):
     context.close()
 
 
-    @pytest.fixture(scope="function")
-def account_card_page(page):  # Если нужен залогиненный контекст, вместо page используй auth_admin_page или auth_user_page
+@pytest.fixture(scope="function")
+def account_card_page(auth_admin_page):
     """Фикстура для инициализации карточки аккаунта"""
-    return AccountCardPage(page)
+    return AccountCardPage(auth_admin_page)
 
     
