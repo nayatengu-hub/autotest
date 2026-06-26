@@ -7,7 +7,7 @@ ENV = os.getenv("ENV", "prod").lower()
 
 if ENV == "prod":
     base_url = os.getenv("BASE_URL")
-    api_url = "https://billing-back.business-pad.com" # Default guess for prod, though user only mentioned test.
+    api_url = None # Авторизация через API на проде не поддерживается
     username = os.getenv("APP_USERNAME")
     password = os.getenv("PASSWORD")
     admin_username = os.getenv("APP_USERNAME")

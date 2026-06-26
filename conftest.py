@@ -29,8 +29,11 @@ def browser_type_launch_args(browser_type_launch_args):
 
 @pytest.fixture(scope="session")
 def auth_user_state(playwright: Playwright):
+    if not config.api_url:
+        pytest.skip("Авторизация через API не поддерживается на данном стенде (prod).")
+
     # Авторизация пользователя через API (Обход UI-капчи)
-    request_context = playwright.request.new_context()
+    request_context = playwright.request.new_context(ignore_https_errors=True)
     response = request_context.post(
         f"{config.api_url}/control/api/v1/auth/login",
         data={
@@ -68,8 +71,11 @@ def guest_page(browser):
 
 @pytest.fixture(scope="session")
 def auth_admin_state(playwright: Playwright):
+    if not config.api_url:
+        pytest.skip("Авторизация через API не поддерживается на данном стенде (prod).")
+
     # Авторизация администратора через API (Обход UI-капчи)
-    request_context = playwright.request.new_context()
+    request_context = playwright.request.new_context(ignore_https_errors=True)
     response = request_context.post(
         f"{config.api_url}/control/api/v1/auth/login",
         data={
