@@ -16,7 +16,7 @@ def test_account_card(account_card_page: AccountCardPage):
         "charge_per_day": 630,
         "free_period": 30,
         "available_until": "26.07.2026",     # Обновлено
-        "block_period": 14
+        "block_period": 15
     }
     
     with allure.step("Переход на страницу аккаунта"):
