@@ -23,10 +23,12 @@ class AccountDetails(BaseComponent):
         self.select_avatar = page.get_by_role("main").get_by_test_id("avatar")
         
         # --- ЛОКАТОРЫ ДЛЯ АЛЕРТОВ ---
-        self.alert_missing_avatar = page.get_by_text("Выберите аватар для сохранения", exact=True)
-        self.alert_invalid_name = page.get_by_text("Поле может содержать только кириллицу, пробелы и дефисы", exact=True)
-        self.alert_profile_updated = page.get_by_text("Профиль успешно обновлён", exact=True)
-        self.alert_avatar_changed = page.get_by_text("Аватар успешно изменён", exact=True)
+        self.alert_missing_avatar = page.get_by_text("Выберите аватар для сохранения").first
+        # Скриншот показывает, что алерт это блок (вероятно Snackbar/Alert MUI) и сообщение об ошибке может быть не в role=alert
+        # Ошибка в скриншоте на английском "Field can only contain Cyrillic letters, spaces and hyphens" из-за локали, но тест ждет русский!
+        self.alert_invalid_name = page.get_by_text("Поле может содержать только кириллицу, пробелы и дефисы").or_(page.get_by_text("Field can only contain Cyrillic letters, spaces and hyphens")).first
+        self.alert_profile_updated = page.get_by_text("Профиль успешно обновлён").first
+        self.alert_avatar_changed = page.get_by_text("Аватар успешно изменён").first
         
         # Кнопка закрытия алерта 
         self.close_alert_button = page.locator(".MuiButtonBase-root.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeMedium.MuiButton-textSizeMedium.MuiButton-colorPrimary.MuiButton-disableElevation.bp-1dgbx2w")

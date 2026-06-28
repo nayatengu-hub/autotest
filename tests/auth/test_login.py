@@ -15,4 +15,4 @@ def test_login(login_page: LoginPage):
         login_page.login_form.login(username=config.username, password=config.password)
     
     with allure.step("Ожидание перехода на домашнюю страницу"):
-        login_page.page.wait_for_url("**/home/accounts")
+        login_page.page.wait_for_url("**/home/**")

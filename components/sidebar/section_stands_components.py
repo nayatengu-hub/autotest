@@ -12,8 +12,9 @@ class SectionStands(BaseComponent):
         self.page_title_stands = page.get_by_role('heading', name='Стенды', level=1)
         self.page_heading_stands = page.get_by_role('heading', name='Стенды', level=2) 
         self.column_header_no = page.get_by_role("heading", name="п/п")
-        self.column_header_accounts = page.get_by_role("heading", name="Аккаунт")
-        self.column_header_name_stands = page.get_by_role("heading", name="Название стенда")
+        # Исправлен strict mode: находит заголовок колонки
+        self.column_header_accounts = page.get_by_test_id("uniTable.header.row").get_by_role("heading", name="Аккаунт")
+        self.column_header_name_stands = page.get_by_test_id("uniTable.header.row").get_by_role("heading", name="Название стенда")
         self.column_header_created_date = page.get_by_role("heading", name="Дата создания")
         self.column_header_users = page.get_by_role("heading", name="Пользователей")
         self.column_header_presets = page.get_by_role("heading", name="Пресеты")
