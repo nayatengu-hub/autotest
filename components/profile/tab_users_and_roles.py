@@ -14,7 +14,7 @@ class UsersRoles(BaseComponent):
         self.column_header_role = page.get_by_role("heading", name="Текущая роль")
         self.column_header_registration = page.get_by_role("heading", name="Дата регистрации")
         self.column_header_status = page.get_by_role("heading", name="Статус")
-        self.column_actions = page.get_by_role("row", name="1 Аккаунт-11 rivming@gmail.").get_by_test_id("menuViaDots.trigger")
+        self.column_actions = page.get_by_role("row", name="1 Суперадмин test@business-").get_by_test_id("menuViaDots.trigger")
         self.edit_user = page.get_by_test_id("menuViaDots.menu.item-0")
         self.button_cancel = page.get_by_role("button", name="Отмена")
     
