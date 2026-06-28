@@ -28,26 +28,26 @@ def browser_type_launch_args(browser_type_launch_args):
     }
 
 @pytest.fixture(scope="session")
-def auth_user_state(playwright: Playwright):
-    if not config.api_url:
-        pytest.skip("Авторизация через API не поддерживается на данном стенде (prod).")
+def auth_user_state(browser):
+    # Передаем base_url в контекст!
+    context = browser.new_context(base_url=config.base_url, user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36", extra_http_headers={"Accept-Language": "ru-RU,ru;q=0.9"})
+    page = context.new_page()
 
-    # Авторизация пользователя через API (Обход UI-капчи)
-    request_context = playwright.request.new_context(ignore_https_errors=True)
-    response = request_context.post(
-        f"{config.api_url}/control/api/v1/auth/login",
-        data={
-            "identity": config.username,
-            "password": config.password
-        }
-    )
-    assert response.ok, f"Ошибка авторизации пользователя через API: {response.text()}"
+    login_page = LoginPage(page)
+    # Если в login_page.navigate() у вас page.goto(self.path),
+    # то благодаря base_url выше, он перейдет на правильный стенд
+    login_page.navigate()
+
+    # Берем креды из конфига (они уже соответствуют нужному стенду)
+    login_page.login_form.login(username=config.username, password=config.password)
+
+    # Ожидание успешного входа!
+    page.wait_for_url("**/home/**")
     
     state_path = "data/auth_state.json"
-    os.makedirs(os.path.dirname(state_path), exist_ok=True)
-    request_context.storage_state(path=state_path)
-    request_context.dispose()
-
+    os.makedirs(os.path.dirname(state_path), exist_ok=True) # Создаем папку, если ее нет
+    context.storage_state(path=state_path)
+    context.close()
     return state_path
 
 @pytest.fixture(scope="function")
@@ -70,26 +70,23 @@ def guest_page(browser):
     context.close()
 
 @pytest.fixture(scope="session")
-def auth_admin_state(playwright: Playwright):
-    if not config.api_url:
-        pytest.skip("Авторизация через API не поддерживается на данном стенде (prod).")
+def auth_admin_state(browser):
+    context = browser.new_context(base_url=config.base_url, user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36", extra_http_headers={"Accept-Language": "ru-RU,ru;q=0.9"})
+    page = context.new_page()
 
-    # Авторизация администратора через API (Обход UI-капчи)
-    request_context = playwright.request.new_context(ignore_https_errors=True)
-    response = request_context.post(
-        f"{config.api_url}/control/api/v1/auth/login",
-        data={
-            "identity": config.admin_username,
-            "password": config.admin_password
-        }
-    )
-    assert response.ok, f"Ошибка авторизации администратора через API: {response.text()}"
+    login_page = LoginPage(page)
+    login_page.navigate()
+
+    # Используем админские креды из конфига
+    login_page.login_form.login(username=config.admin_username, password=config.admin_password)
+
+    # Ждем успешного входа администратора!
+    page.wait_for_url("**/home/**")
     
     state_path = "data/auth_admin_state.json"
-    os.makedirs(os.path.dirname(state_path), exist_ok=True)
-    request_context.storage_state(path=state_path)
-    request_context.dispose()
-
+    os.makedirs(os.path.dirname(state_path), exist_ok=True) # Создаем папку, если ее нет
+    context.storage_state(path=state_path)
+    context.close()
     return state_path
 
 @pytest.fixture(scope="function")
