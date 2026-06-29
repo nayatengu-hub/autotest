@@ -52,6 +52,14 @@ class InfoStand(BaseComponent):
         for _ in range(times):
             self.free_period_decrement_btn.click()
 
+    def increment_block_period(self, times: int = 1):
+        for _ in range(times):
+            self.block_period_increment_btn.click()
+
+    def decrement_block_period(self, times: int = 1):
+        for _ in range(times):
+            self.block_period_decrement_btn.click()
+
     def save_changes(self):
         # Убедимся, что попап не мешает.
         if self.success_alert.is_visible():

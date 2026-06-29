@@ -44,10 +44,14 @@ def test_update_stand_parameters(account_card_page: AccountCardPage):
         # Увеличиваем значение на 1 кликом по стрелочке
         account_card_page.info_stand.increment_free_period(1)
 
+    with allure.step("Изменение значения 'Период блокировки'"):
+        # Увеличиваем значение периода блокировки на 1
+        account_card_page.info_stand.increment_block_period(1)
+
     with allure.step("Сохранение изменений и проверка алерта"):
         account_card_page.info_stand.save_changes()
 
-    with allure.step("Возврат значения в исходное состояние (cleanup)"):
+    with allure.step("Возврат значений в исходное состояние (cleanup)"):
         # В данном тесте для стабильности пропускаем обратное сохранение,
         # так как оно может зависнуть на долгой перезагрузке стенда
         pass
