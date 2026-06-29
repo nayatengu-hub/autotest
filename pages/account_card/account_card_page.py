@@ -2,6 +2,7 @@ from playwright.sync_api import Page
 from pages.base_page import BasePage
 from components.account_card.info_stand import InfoStand
 from components.account_card.statistics_tab import StatisticsTab
+from components.account_card.info_user import InfoUser
 
 
 class AccountCardPage(BasePage):
@@ -11,5 +12,6 @@ class AccountCardPage(BasePage):
         super().__init__(page)
         self.info_stand = InfoStand(page)
         self.statistics_tab = StatisticsTab(page)
+        self.info_user = InfoUser(page)
 
         

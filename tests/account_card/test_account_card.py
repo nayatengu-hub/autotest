@@ -71,3 +71,42 @@ def test_stand_statistics_tab(account_card_page: AccountCardPage):
 
     with allure.step("Проверка отображения таблицы со статистикой"):
         account_card_page.statistics_tab.verify_opened()
+@allure.feature("Пользователь")
+@allure.story("Просмотр и изменение карточки пользователя (US-A5.1.2)")
+@allure.title("Отображение актуальных данных пользователя при открытии карточки")
+def test_user_data_display(account_card_page: AccountCardPage):
+    with allure.step("Переход на страницу аккаунта"):
+        account_card_page.navigate()
+
+    with allure.step("Убедиться, что актуальные данные пользователя отображаются на странице"):
+        account_card_page.info_user.verify_user_data()
+
+@allure.feature("Пользователь")
+@allure.story("Просмотр и изменение карточки пользователя (US-A5.1.2)")
+@allure.title("Успешное пополнение счета пользователя на валидную сумму бонусов")
+def test_user_replenish_balance_success(account_card_page: AccountCardPage):
+    with allure.step("Переход на страницу аккаунта"):
+        account_card_page.navigate()
+
+    with allure.step("Начислить 200 бонусов и проверить успешное сообщение"):
+        account_card_page.info_user.replenish_balance("200")
+        account_card_page.info_user.close_success_alert()
+
+@allure.feature("Пользователь")
+@allure.story("Просмотр и изменение карточки пользователя (US-A5.1.2)")
+@allure.title("Валидация поля пополнения (ввод букв, отрицательных чисел, пустой строки, нуля)")
+def test_user_replenish_validation(account_card_page: AccountCardPage):
+    with allure.step("Переход на страницу аккаунта"):
+        account_card_page.navigate()
+
+    with allure.step("Ввод букв (10p) - кнопка Отмена"):
+        account_card_page.info_user.check_validation_error("10p")
+
+    with allure.step("Ввод нуля (00) - текст ошибки"):
+        account_card_page.info_user.check_validation_error("00")
+
+    with allure.step("Ввод пустого значения"):
+        account_card_page.info_user.check_validation_error("")
+
+    with allure.step("Ввод отрицательного значения (-100)"):
+        account_card_page.info_user.check_validation_error("-100")
