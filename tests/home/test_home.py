@@ -13,6 +13,8 @@ def test_home(home_page: HomePage):
         home_page.block_metrics.ckeck_block_elements()
     with allure.step("Проверка элементов таблицы аккаунтов"):
         home_page.table_accounts.table_elements()
+    with allure.step("Проверка фильтрации по дате регистрации"):
+        home_page.table_accounts.check_date_filtering()
     with allure.step("Переключение вкладок в заголовке"):
         home_page.page_header_admin.switch_to_tab()
     with allure.step("Проверка элементов макета страницы"):

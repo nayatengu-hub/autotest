@@ -30,4 +30,15 @@ class TableAccounts(BaseComponent):
         expect(self.column_header_upd).to_be_visible()
         expect(self.column_header_refunds).to_be_visible()
 
+    def check_date_filtering(self):
+        self.page.locator(".MuiButtonBase-root.MuiIconButton-root").first.click()
+        self.page.get_by_role("gridcell", name="17").first.click()
+        self.page.locator("div:nth-child(2) > .MuiFormControl-root > .MuiInputBase-root > .MuiInputAdornment-root > .MuiButtonBase-root").click()
+        self.page.get_by_role("gridcell", name="27").first.click()
+        self.page.get_by_role("button", name="Сбросить фильтры").click()
+        self.page.locator(".MuiButtonBase-root.MuiIconButton-root").first.click()
+        self.page.get_by_role("gridcell", name="30").first.click()  # крестик на поле с датой
+        self.page.locator("div:nth-child(2) > .MuiFormControl-root > .MuiInputBase-root > .MuiInputAdornment-root > .MuiButtonBase-root").click()
+        self.page.get_by_role("gridcell", name="29").first.click()
+        self.page.locator(".MuiButtonBase-root.MuiIconButton-root").first.click()
 
