@@ -1,8 +1,8 @@
 from playwright.sync_api import Page
 from pages.base_page import BasePage
-from components.account_card.info_stand import InfoStand
-from components.account_card.statistics_tab import StatisticsTab
-from components.account_card.info_user import InfoUser
+from components.account_card.info_stand_component import InfoStand
+from components.account_card.statistics_tab_component import StatisticsTab
+from components.account_card.info_user_component import InfoUser
 
 
 class AccountCardPage(BasePage):
