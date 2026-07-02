@@ -15,7 +15,7 @@ class SectionNotifications(BaseComponent):
 
         # Заголовок страницы и действия
         self.page_title_notifications = page.get_by_role('heading', name='Уведомления', level=1)
-        self.button_send_notifications = page.get_by_test_id("iconButton").first
+        self.button_send_notifications = self.page_title_notifications.locator("..").locator("button").first
         self.dott_menu = page.get_by_test_id("menuViaDots.trigger").first
         self.button_read_all = page.get_by_test_id("menuViaDots.menu.item-0")
         self.button_cancel = page.get_by_role("button", name="Отменить")
@@ -33,8 +33,8 @@ class SectionNotifications(BaseComponent):
         self.column_header_date = page.get_by_role("heading", name="Дата")
         self.column_header_text = page.get_by_role("heading", name="Текст") 
         self.column_header_actions = page.get_by_role("row", name="1 Новый стенд Системное 30.06").get_by_test_id("menuViaDots.trigger")
-        self.dott_menu_read = page.get_by_test_id("menuViaDots.menu.item-0")
-        self.dott_menu_delete = page.get_by_test_id("menuViaDots.menu.item-1")
+        self.dott_menu_read = page.get_by_role("menuitem", name="Прочитать")
+        self.dott_menu_delete = page.get_by_role("menuitem", name="Удалить")
 
         # Модальное окно уведомления
         self.modal_window_title = page.get_by_role("heading", name="Новый стенд")
@@ -44,7 +44,8 @@ class SectionNotifications(BaseComponent):
         self.button_x = page.locator(".MuiButtonBase-root.MuiButton-root.MuiButton-outlined.MuiButton-outlinedSecondary.MuiButton-sizeMedium.MuiButton-outlinedSizeMedium.MuiButton-colorSecondary.MuiButton-disableElevation.bp-1pjj1z7")
         self.button_close = page.get_by_test_id("modalFooter").get_by_test_id("button")
 
-        # Botton bar удалить уведомление
+        # Bottom bar удалить уведомление
+        self.bottom_bar_delete_text = page.get_by_text("Хотите удалить уведомление?")
         self.button_delete = page.get_by_role("button", name="Удалить")
 
         # Вкладка 'Отправленные'
