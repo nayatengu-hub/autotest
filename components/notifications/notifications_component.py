@@ -2,6 +2,7 @@ from playwright.sync_api import Page, Locator
 from typing import Optional
 from components.base_component import BaseComponent
 from playwright.sync_api import expect
+import re
 
 
 class SectionNotifications(BaseComponent):
@@ -21,8 +22,8 @@ class SectionNotifications(BaseComponent):
         self.button_read = page.get_by_role("button", name="Прочитать")
 
         # Вкладки
-        self.tab_my_notifications = page.get_by_test_id("tabList.tab-mui-p-_r_7j_-Tab-/notifications/received")
-        self.tab_sent_notifications = page.get_by_test_id("tabList.tab-mui-p-_r_7j_-Tab-/notifications/sent")
+        self.tab_my_notifications = page.get_by_role("tab", name=re.compile(r"Мои"))
+        self.tab_sent_notifications = page.get_by_role("tab", name="Отправленные")
 
         # Вкладка 'Мои'
         # Таблица данных
@@ -48,7 +49,7 @@ class SectionNotifications(BaseComponent):
 
         # Вкладка 'Отправленные'
         # Доп. меню
-        self.dott_menu_repeat = self.get_by_test_id("menuViaDots.menu.item-1")
+        self.dott_menu_repeat = page.get_by_test_id("menuViaDots.menu.item-1")
 
         # Модальное окно уведомления "прочитанные"
         self.recipients = page.get_by_text("Получатели:")
@@ -58,7 +59,10 @@ class SectionNotifications(BaseComponent):
         self.window_title = page.get_by_role("heading", name="Основная информация")
         self.field_title = page.locator("[id=\"_r_ku_-label\"]").get_by_text("Заголовок *")
         self.field_description = page.get_by_text("Описание *")
-        self.field_select_recipient = page.get_by_text("Получатель *Выберите из спискаChip")
+        self.field_select_recipient_input = page.get_by_test_id("outlinedInput")
+        self.field_select_recipient_combobox = page.get_by_role("combobox", name="Получатель Выберите из списка")
+        self.button_add_recipient = page.get_by_role("button", name="Добавить")
+        self.button_edit_recipient = page.get_by_role("button", name="Изменить")
         self.field_category_notification = page.get_by_text("Категория уведомления *")
 
         # Select menu 'Категория уведомления'
