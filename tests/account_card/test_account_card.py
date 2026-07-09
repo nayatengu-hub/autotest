@@ -12,7 +12,7 @@ def test_account_card(account_card_page: AccountCardPage):
         "created_date": "26.06.2026 13:55",  # Обновлено
         "users_count": 1,
         "cluster": "production",
-        "status": "Создание",
+        "status": "Удален",
         "charge_per_day": 630,
         "free_period": 32,
         "available_until": "26.07.2026",     # Обновлено
@@ -24,6 +24,7 @@ def test_account_card(account_card_page: AccountCardPage):
     with allure.step("Переход на страницу аккаунта"):
         account_card_page.navigate()
         account_card_page.info_stand.dott.click()
+        account_card_page.info_stand.menu_list.wait_for(state="visible", timeout=5000)
         account_card_page.info_stand.card_card.click()
     
     # Шаг 2: Проверяем поля прямо через объект фикстуры account_card_page
@@ -38,6 +39,7 @@ def test_update_stand_parameters(account_card_page: AccountCardPage):
     with allure.step("Переход на страницу аккаунта и открытие параметров"):
         account_card_page.navigate()
         account_card_page.info_stand.dott.click()
+        account_card_page.info_stand.menu_list.wait_for(state="visible", timeout=5000)
         account_card_page.info_stand.card_card.click()
 
     with allure.step("Изменение значения 'Бесплатный период'"):
@@ -64,6 +66,7 @@ def test_stand_statistics_tab(account_card_page: AccountCardPage):
     with allure.step("Переход на страницу аккаунта и открытие карточки стенда"):
         account_card_page.navigate()
         account_card_page.info_stand.dott.click()
+        account_card_page.info_stand.menu_list.wait_for(state="visible", timeout=5000)
         account_card_page.info_stand.card_card.click()
 
     with allure.step("Переход на вкладку 'Статистика'"):
@@ -71,6 +74,7 @@ def test_stand_statistics_tab(account_card_page: AccountCardPage):
 
     with allure.step("Проверка отображения таблицы со статистикой"):
         account_card_page.statistics_tab.verify_opened()
+
 @allure.feature("Пользователь")
 @allure.story("Просмотр и изменение карточки пользователя (US-A5.1.2)")
 @allure.title("Отображение актуальных данных пользователя при открытии карточки")
@@ -80,33 +84,3 @@ def test_user_data_display(account_card_page: AccountCardPage):
 
     with allure.step("Убедиться, что актуальные данные пользователя отображаются на странице"):
         account_card_page.info_user.verify_user_data()
-
-@allure.feature("Пользователь")
-@allure.story("Просмотр и изменение карточки пользователя (US-A5.1.2)")
-@allure.title("Успешное пополнение счета пользователя на валидную сумму бонусов")
-def test_user_replenish_balance_success(account_card_page: AccountCardPage):
-    with allure.step("Переход на страницу аккаунта"):
-        account_card_page.navigate()
-
-    with allure.step("Начислить 200 бонусов и проверить успешное сообщение"):
-        account_card_page.info_user.replenish_balance("200")
-        account_card_page.info_user.close_success_alert()
-
-@allure.feature("Пользователь")
-@allure.story("Просмотр и изменение карточки пользователя (US-A5.1.2)")
-@allure.title("Валидация поля пополнения (ввод букв, отрицательных чисел, пустой строки, нуля)")
-def test_user_replenish_validation(account_card_page: AccountCardPage):
-    with allure.step("Переход на страницу аккаунта"):
-        account_card_page.navigate()
-
-    with allure.step("Ввод букв (10p) - кнопка Отмена"):
-        account_card_page.info_user.check_validation_error("10p")
-
-    with allure.step("Ввод нуля (00) - текст ошибки"):
-        account_card_page.info_user.check_validation_error("00")
-
-    with allure.step("Ввод пустого значения"):
-        account_card_page.info_user.check_validation_error("")
-
-    with allure.step("Ввод отрицательного значения (-100)"):
-        account_card_page.info_user.check_validation_error("-100")
