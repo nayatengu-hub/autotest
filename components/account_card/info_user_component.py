@@ -11,10 +11,10 @@ class InfoUser(BaseComponent):
         # Данные пользователя (верхняя панель)
         # Имя пользователя - заголовок h2 или соответствующий элемент (в скриншотах "Анастасия")
         self.user_name = page.locator("h2") # Уточним этот локатор, возможно это h2 или div
-        self.balance = page.locator("text=Текущий баланс:")
-        self.active_stands = page.locator("text=Активно стендов:")
-        self.daily_charge = page.locator("text=Списание в сутки руб:")
-        self.days_left = page.locator("text=Осталось дней:")
+        self.balance = page.locator("text=Текущий баланс, RUB")
+        self.active_stands = page.locator("text=Активно стендов")
+        self.daily_charge = page.locator("text=Списание в сутки, RUB")
+        self.days_left = page.locator("text=Осталось дней").first
         self.payer = page.locator("text=Плательщик:")
 
         # Кнопка Пополнить

@@ -10,16 +10,17 @@ class InfoStand(BaseComponent):
         self.page = page 
 
         # Открытие вкладки
-        self.dott = page.get_by_test_id("menuViaDots.trigger")
+        self.dott = page.get_by_role("row").filter(has_text="test-1").get_by_test_id("menuViaDots.trigger")
         self.card_card = page.get_by_test_id("menuViaDots.menu.item-0")
+        self.menu_list = page.locator("ul[role='menu']")
         
         # Проверка наличие вкладок
-        self.open_tab_stand_parameters = page.get_by_role("button", name="Параметры стенда")
-        self.open_tab_statistics = page.get_by_role("button", name="Статистика")
+        self.open_tab_stand_parameters = page.locator("p").filter(has_text="Параметры стенда").first
+        self.open_tab_statistics = page.locator("p").filter(has_text="Статистика").first
 
         #  Вкладка "Параметры стенда"
         # Проверка полей
-        self.page_title = page.get_by_role("heading", name="Параметры стенда")
+        self.page_title = page.locator("h2", has_text="Параметры стенда").first
         # Мы можем найти эти элементы по их позиции.
         # В предоставленном коде: page.locator(".MuiGrid-root > button:nth-child(2)").first.click() -> это стрелка вверх для первого инпута
         # Вернем старый локатор для инпутов, который работал (первый тест пасснул до этого).
