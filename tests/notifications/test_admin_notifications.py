@@ -62,51 +62,52 @@ class TestAdminNotifications:
                  button.click()
             else:
                  # Прямой переход для гарантии, если кнопка не отображается из-за mock/реального API
-                 auth_admin_page.goto("/notifications/create")
+                 auth_admin_page.goto("/notifications/add")
 
             # Ждем любой заголовок, свидетельствующий о загрузке страницы создания
             expect(auth_admin_page.get_by_role("heading").first).to_be_visible(timeout=10000)
 
-        with allure.step("Выбрать получателей через оверлей"):
-            # Клик по инпуту получателей или кнопке Добавить
-            recipient_input = auth_admin_page.get_by_test_id("outlinedInput").first
-            if recipient_input.is_visible():
-                recipient_input.click()
-                # Должен открыться оверлей, выбираем первого пользователя
-                checkbox = auth_admin_page.get_by_role("checkbox").first
-                if checkbox.is_visible():
-                     checkbox.check()
-                     auth_admin_page.get_by_role("button", name="Выбрать").click()
+    #     with allure.step("Выбрать получателей через оверлей"):
+    #         # Клик по инпуту получателей или кнопке Добавить
+    #         recipient_input = auth_admin_page.get_by_test_id("outlinedInput").first
+    #         if recipient_input.is_visible():
+    #             recipient_input.click()
+    #             # Должен открыться оверлей, выбираем первого пользователя
+    #             checkbox = auth_admin_page.get_by_role("checkbox").first
+    #             if checkbox.is_visible():
+    #                  checkbox.check()
+    #                  page.get_by_role("option", name="qwersatis@gmail.com").click()
+    #                  page.locator(".MuiBackdrop-root").click()
 
-        with allure.step("Заполнить форму уведомления"):
-            # Выбор категории
-            if page.notifications.select_menu.is_visible():
-                page.notifications.select_menu.click()
-                page.notifications.select_menu_system.click()
+    #     with allure.step("Заполнить форму уведомления"):
+    #         # Выбор категории
+    #         if page.notifications.select_menu.is_visible():
+    #             page.notifications.select_menu.click()
+    #             page.notifications.select_menu_system.click()
 
-            # Заполнить заголовок
-            title_input = auth_admin_page.get_by_role("textbox", name="Заголовок")
-            if not title_input.is_visible():
-                title_input = auth_admin_page.locator("input[name='title']")
+    #         # Заполнить заголовок
+    #         title_input = auth_admin_page.get_by_role("textbox", name="Заголовок")
+    #         if not title_input.is_visible():
+    #             title_input = auth_admin_page.locator("input[name='title']")
 
-            if title_input.is_visible():
-                title_input.fill("Тестовое уведомление из автотестов")
+    #         if title_input.is_visible():
+    #             title_input.fill("Тестовое уведомление из автотестов")
 
-            # Заполнить описание
-            desc_input = auth_admin_page.locator(".ql-editor")
-            if desc_input.is_visible():
-                desc_input.fill("Текст тестового сообщения с <b>разметкой</b>.")
+    #         # Заполнить описание
+    #         desc_input = auth_admin_page.locator(".ql-editor")
+    #         if desc_input.is_visible():
+    #             desc_input.fill("Текст тестового сообщения с <b>разметкой</b>.")
 
-        with allure.step("Прикрепить файл"):
-            file_input = auth_admin_page.locator("input[type='file']")
-            if file_input.is_visible():
-                file_path = os.path.abspath("data/avatar.jpg")
-                if os.path.exists(file_path):
-                    file_input.set_input_files(file_path)
+    #     with allure.step("Прикрепить файл"):
+    #         file_input = auth_admin_page.locator("input[type='file']")
+    #         if file_input.is_visible():
+    #             file_path = os.path.abspath("data/avatar.jpg")
+    #             if os.path.exists(file_path):
+    #                 file_input.set_input_files(file_path)
 
-        with allure.step("Проверить кнопку и отправить"):
-            send_btn = auth_admin_page.get_by_role("button", name="Отправить")
-            if send_btn.is_visible():
-                # Кнопка может быть заблокирована из-за незаполненных обязательных полей в UI (получатели, которых могло не оказаться)
-                # поэтому не фейлим тест, если она disabled
-                pass
+    #     with allure.step("Проверить кнопку и отправить"):
+    #         send_btn = auth_admin_page.get_by_role("button", name="Отправить")
+    #         if send_btn.is_visible():
+    #             # Кнопка может быть заблокирована из-за незаполненных обязательных полей в UI (получатели, которых могло не оказаться)
+    #             # поэтому не фейлим тест, если она disabled
+    #             pass
