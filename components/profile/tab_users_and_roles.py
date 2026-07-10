@@ -6,7 +6,7 @@ class UsersRoles(BaseComponent):
     def __init__(self, page: Page, root_locator: Optional[Locator] = None):
         super().__init__(page, root_locator)
         self.page = page
-        self.open_tab = page.get_by_role("button", name="Пользователи и роли")
+        self.open_tab = page.locator("p").filter(has_text="Пользователи и роли")
         self.heading_users = page.get_by_role("heading", name="Пользователи и роли")
         self.column_header_no = page.get_by_role("heading", name="п/п")
         self.column_header_name = page.get_by_role("heading", name="Имя пользователя")
@@ -14,7 +14,7 @@ class UsersRoles(BaseComponent):
         self.column_header_role = page.get_by_role("heading", name="Текущая роль")
         self.column_header_registration = page.get_by_role("heading", name="Дата регистрации")
         self.column_header_status = page.get_by_role("heading", name="Статус")
-        self.column_actions = page.get_by_role("row", name="1 Аккаунт-13 romanandreich11@").get_by_test_id("menuViaDots.trigger")
+        self.column_actions = page.get_by_role("row", name="1 Суперадмин test@business-").get_by_test_id("menuViaDots.trigger")
         self.edit_user = page.get_by_test_id("menuViaDots.menu.item-0")
         self.button_cancel = page.get_by_role("button", name="Отмена")
     

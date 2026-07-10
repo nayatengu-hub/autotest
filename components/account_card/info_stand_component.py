@@ -12,6 +12,7 @@ class InfoStand(BaseComponent):
         # Открытие вкладки
         self.dott = page.get_by_role("row", name="3 test-1 26.06.2026 13:55").get_by_test_id("menuViaDots.trigger")
         self.card_card = page.get_by_test_id("menuViaDots.menu.item-0")
+        self.menu_list = page.locator("ul[role='menu']")
         
         # Проверка наличие вкладок
         self.open_tab_stand_parameters = page.get_by_role("button", name="Параметры стенда")

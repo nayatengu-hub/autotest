@@ -10,7 +10,7 @@ class AccountDetails(BaseComponent):
         
         # --- ОБЪЯВЛЕНИЕ ЛОКАТОРОВ ---
         self.save_button = page.get_by_role('button', name='Сохранить')
-        self.edit_name = page.get_by_role('textbox').first
+        self.edit_name = page.locator("input[type='text']").first
         self.cancel_button = page.get_by_role('button', name='Отмена')
         
         # Динамический путь к файлу
