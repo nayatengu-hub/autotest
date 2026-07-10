@@ -20,7 +20,7 @@ class SectionAccounts(BaseComponent):
         self.column_header_upd = page.get_by_test_id("uniTable.header.row").locator("div").filter(has_text="УПД")
         self.column_header_refunds = page.get_by_test_id("uniTable.header.row").locator("div").filter(has_text="Возвраты")
         # Улучшенный локатор без привязки к жесткой дате/времени и индексу "1 "
-        self.dott_menu = page.get_by_role("row").filter(has_text="Суперадмин").get_by_test_id("menuViaDots.trigger").first
+        self.dott_menu = page.get_by_role("row", name="1 Аккаунт-13 6b60771c-bf07-").get_by_test_id("menuViaDots.trigger")
         self.button_open = page.get_by_test_id("menuViaDots.menu.item-0")
         self.sidebar_accounts = page.get_by_role('button', name='Аккаунты')
         # Улучшенный локатор - Аккаунт-11 может быть изменен

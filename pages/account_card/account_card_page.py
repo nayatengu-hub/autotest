@@ -11,7 +11,6 @@ class AccountCardPage(BasePage):
     def __init__(self, page: Page):
         super().__init__(page)
         self.info_stand = InfoStand(page)
-        self.statistics_tab = StatisticsTab(page)
-        self.info_user = InfoUser(page)
+
 
         
