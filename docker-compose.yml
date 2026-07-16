@@ -2,9 +2,17 @@ version: '3.8'
 
 services:
   tests:
+    image: your_image_name
+    environment:
+      - DISPLAY=:1  # Указываем дисплей, который поднял x11vnc
+    # ... остальные настройки ...
     build: .
     env_file:
       - .env
+    # Пробрасываем порты: 8080 для веб-браузера, 5900 для VNC-клиента
+    ports:
+      - "8080:8080"
+      - "5900:5900"
     volumes:
       - ./allure-results:/app/allure-results
     networks:

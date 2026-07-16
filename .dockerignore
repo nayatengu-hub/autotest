@@ -1,0 +1,21 @@
+# Игнорируем виртуальные окружения
+venv/
+.venv/
+env/
+
+# Игнорируем кэш Python и тестов
+**/__pycache__/
+.pytest_cache/
+.mypy_cache/
+
+# Игнорируем логи и отчеты
+*.log
+reports/
+screenshots/
+
+# Игнорируем файлы Git и сам Docker
+.git/
+.gitignore
+docker-compose.yml
+Dockerfile
+.dockerignore
